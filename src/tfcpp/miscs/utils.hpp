@@ -9,7 +9,7 @@
 
 //namespaces
 namespace tfcpp {
-namespace misc {
+namespace miscs {
 
 /*!
 \brief Miscellaneous utility class
