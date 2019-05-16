@@ -1,10 +1,17 @@
 #!/bin/bash
 set +ex;
 
+#PROGRAMME ENTRY POINT==========================================================
+if [[ $BASH_SOURCE != $0 ]]; then
+  echo "Don't source this file, bash it.";
+  return;
+fi
+
 cd ../..
 eval $(ssh-agent -s);
 ssh-add ~/.ssh/devel2-tfcpp;
-pacp;
+git pull && git add -A && git commit -a -m Msg && git push;
+sudo pkill -f ssh-agent;
 cd examples/xor;
 
 #eof

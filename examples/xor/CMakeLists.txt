@@ -4,8 +4,13 @@
 #cmake version
 cmake_minimum_required(VERSION 3.10)
 
-#programme info
+#libs
 find_package(TensorflowCC REQUIRED)
+
+#include dirs
+include_directories(../../src)
+
+#linking
 add_executable(prog prog.cpp)
 target_link_libraries(prog TensorflowCC::Shared)
 

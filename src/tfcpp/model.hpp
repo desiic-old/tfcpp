@@ -17,7 +17,7 @@ class model {
 };
 
 //namespaces
-}}
+}
 
 //include guard
 #endif 

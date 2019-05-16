@@ -11,12 +11,16 @@
 #include <tfcpp/model.hpp>
 #include <tfcpp/miscs/utils.hpp>
 
+//namespaces
+using namespace std;
+using namespace tfcpp;
+
 //PROGRAMME ENTRY POINT=========================================================
 /*!
 \brief Main function
 */
 int main(int Argc,char* Args[]){
-  return 0;
+  cout <<"test" <<endl;
 }
 
 //eof
