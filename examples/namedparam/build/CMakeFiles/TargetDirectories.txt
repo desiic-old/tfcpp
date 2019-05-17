@@ -1,0 +1,3 @@
+/home/abix/aiml-prog/tfcpp/examples/namedparam/build/CMakeFiles/rebuild_cache.dir
+/home/abix/aiml-prog/tfcpp/examples/namedparam/build/CMakeFiles/prog.dir
+/home/abix/aiml-prog/tfcpp/examples/namedparam/build/CMakeFiles/edit_cache.dir
