@@ -7,7 +7,7 @@
 #include <iostream>
 
 //custom libs (generic)
-#include <tfcpp/types.hpp>
+#include <types.hpp>
 
 //custom libs (ML)
 #include <tfcpp/t.hpp>           //functions

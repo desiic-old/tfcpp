@@ -13,7 +13,7 @@
 #include <namedtype/named_type.hpp>
 
 //custom libs (generic)
-#include <tfcpp/types.hpp>
+#include <types.hpp>
 
 //custom libs (ML)
 #include <tfcpp/t.hpp>           //functions
