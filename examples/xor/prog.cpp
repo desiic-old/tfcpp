@@ -9,43 +9,51 @@
 //c++ standard
 #include <iostream>
 
-//custom libs
+//libs
 #include <namedtype/named_type.hpp>
 
-#include <tfcpp/t.hpp>
-#include <tfcpp/model.hpp>
-#include <tfcpp/miscs/utils.hpp>
+//custom libs (generic)
+#include <tfcpp/types.hpp>
+
+//custom libs (ML)
+#include <tfcpp/t.hpp>           //functions
+#include <tfcpp/model.hpp>       //ML model
+#include <tfcpp/miscs/utils.hpp> //utilities
 
 //namespaces
 using namespace std;
 using namespace fluent;
 using namespace tfcpp;
 
+//named types
 using text = NamedType<string,struct text_tag>;
 static const text::argument Text;
 
-/*void print(text const& Text){
-  cout <<Text <<endl;
-}*/
-
-using FirstName = NamedType<std::string, struct FirstNameTag>;
-using LastName = NamedType<std::string, struct LastNameTag>;
-
-static const FirstName::argument firstName;
-static const LastName::argument lastName;
-
-void displayName(FirstName const& theFirstName, LastName const& theLastName){
-  cout <<theFirstName.get() <<endl;
+/*!
+\brief Print a string (with NamedType lib)
+*/
+void print(text Text){
+  cout <<Text.get() <<endl;
 }
 
+/*!
+\brief Print a string (using template Type<>)
+*/
+void print(string Text){
+  cout <<Text <<endl;
+}
 
 //PROGRAMME ENTRY POINT=========================================================
 /*!
 \brief Main function
 */
 int main(int Argc,char* Args[]){
-displayName(firstName = "John", lastName = "Doe");
-  //print(Text = "Test named type!");
+  //test NamedType lib
+  print(Text="NamedType Lib, OK!");
+
+  //test Type template
+  Type<string> Text;
+  print(Text=string("Type Template, OK!")); 
 }
 
 //eof
