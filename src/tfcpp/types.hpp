@@ -45,10 +45,10 @@ typedef long double        ldouble;
 /*!
 \brief Template for named parameters to functions/methods
 */
-template <class T>
-class Type {
+template <class Type>
+class type {
   public:
-    T operator= (T Param){
+    Type operator= (Type Param){
       return Param;
     }
 };

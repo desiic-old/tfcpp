@@ -52,7 +52,7 @@ int main(int Argc,char* Args[]){
   print(Text="NamedType Lib, OK!");
 
   //test Type template
-  Type<string> Text;
+  type<string> Text;
   print(Text=string("Type Template, OK!")); 
 }
 

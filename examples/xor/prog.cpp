@@ -30,7 +30,7 @@ void print(string Text){
 \brief Main function
 */
 int main(int Argc,char* Args[]){
-  Type<string> Text;
+  type<string> Text;
   print(Text=string("Learn XOR using TFCpp lib")); 
 }
 
