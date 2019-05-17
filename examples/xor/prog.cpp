@@ -11,8 +11,8 @@
 
 //custom libs (ML)
 #include <tfcpp/t.hpp>           //functions
-#include <tfcpp/model.hpp>       //ML model
-#include <tfcpp/miscs/utils.hpp> //utilities
+#include <tfcpp/model.hpp>       //ML model class
+#include <tfcpp/miscs/utils.hpp> //utility class
 
 //namespaces
 using namespace std;
