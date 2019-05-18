@@ -4,8 +4,8 @@
 */
 
 //include guard
-#ifndef TFCPP_TYPES_HPP
-#define TFCPP_TYPES_HPP
+#ifndef TYPES_HPP
+#define TYPES_HPP
 
 //primitives,
 //avoid 'int' as it has variable lengths

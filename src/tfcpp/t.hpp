@@ -7,18 +7,21 @@
 #ifndef TFCPP_T_HPP
 #define TFCPP_T_HPP
 
-//custom classes
-//please add parent dir of tfcpp to include path
-#include <tfcpp/model.hpp>
-
 //namespaces
 namespace tfcpp {
+
+//scope
+//Scope R;
+
+/*!
+\brief Initialise machine learning
+*/
+void init_ml();
 
 /*!
 \brief Build a DNN model
 */
-model* build_dnn_classifier(){
-}
+//model* build_dnn_classifier();
 
 //namespaces
 }

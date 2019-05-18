@@ -32,6 +32,9 @@ void print(string Text){
 int main(int Argc,char* Args[]){
   type<string> Text;
   print(Text=string("Learn XOR using TFCpp lib")); 
+
+  //init
+  init_ml();
 }
 
 //eof
