@@ -14,6 +14,8 @@ namespace tfcpp {
   \brief Generic model class
   */
   class model {
+    public:
+      model();
   };
 
 //namespaces

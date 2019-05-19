@@ -7,6 +7,9 @@
 #ifndef TFCPP_T_HPP
 #define TFCPP_T_HPP
 
+//core headers
+#include <vector>
+
 //lib headers
 #include <tensorflow/cc/ops/standard_ops.h>         //operations
 #include <tensorflow/cc/framework/gradients.h>      //optimisers
@@ -19,6 +22,9 @@
 
 //custom headers (ML)
 #include <tfcpp/model.hpp>
+
+//use core namespaces
+using namespace std;
 
 //use lib namespaces
 using namespace tensorflow;
@@ -38,7 +44,7 @@ namespace tfcpp {
   /*!
   \brief Build a DNN model
   */
-  model* build_dnn_classifier();
+  model* build_dnn_classifier(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes);
 
 //namespaces
 }

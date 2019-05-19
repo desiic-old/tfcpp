@@ -5,6 +5,7 @@
 
 //core headers
 #include <iostream>
+#include <vector>
 
 //custom headers (generic)
 #include <types.hpp>
@@ -37,6 +38,19 @@ int main(int Argc,char* Args[]){
 
   //init
   init_ml();
+
+  //build dnn model
+  type<long>         Num_Inputs;
+  type<vector<long>> Hidden_Units;
+  type<long>         Num_Classes;
+
+  vector<long> Hidden_Units_Values = {4}; //1 layer of 4 neurons
+
+  model* Model = build_dnn_classifier(
+    Num_Inputs   = 2,
+    Hidden_Units = Hidden_Units_Values,
+    Num_Classes  = 2
+  );
 }
 
 //eof

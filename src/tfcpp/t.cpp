@@ -3,6 +3,10 @@
 \brief TFCpp functions
 */
 
+//core headers
+#include <iostream>
+#include <vector>
+
 //lib headers
 #include <tensorflow/cc/ops/standard_ops.h>         //operations
 #include <tensorflow/cc/framework/gradients.h>      //optimisers
@@ -35,8 +39,11 @@ namespace tfcpp {
   /*!
   \brief Build DNN classifier
   */
-  model* build_dnn_classifier(){
-    //
+  model* build_dnn_classifier(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes){
+    for (auto& Units: Hidden_Units)
+      cout <<Units <<endl;
+
+    return new model();
   }
 
 //namespaces
