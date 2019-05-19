@@ -51,6 +51,8 @@ int main(int Argc,char* Args[]){
     Hidden_Units = Hidden_Units_Values,
     Num_Classes  = 2
   );
+
+  delete Model;
 }
 
 //eof

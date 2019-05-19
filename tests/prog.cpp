@@ -38,6 +38,13 @@ int main() {
   auto Input    = Placeholder(R, DT_FLOAT);
   auto Expected = Placeholder(R, DT_FLOAT);
 
+  //tensorflow 1.7-->1.13 has Placeholder hidden from official doc,
+  //but not deprecated in future, seen in 2.0 array_ops.
+  //another way: use Tensor instead.
+  //the first value in shape is batch size (?)
+  //auto Input    = Tensor(DT_FLOAT, TensorShape({1,...}));
+  //auto Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
+
   //layer variables
   auto Weight1 = Variable(R, {2,2}, DT_FLOAT); //2 inputs, 2 neurons
   auto Bias1   = Variable(R, {2},   DT_FLOAT); //for 2 neurons

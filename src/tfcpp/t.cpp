@@ -40,10 +40,7 @@ namespace tfcpp {
   \brief Build DNN classifier
   */
   model* build_dnn_classifier(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes){
-    for (auto& Units: Hidden_Units)
-      cout <<Units <<endl;
-
-    return new model();
+    return new model(Num_Inputs,Hidden_Units,Num_Classes);
   }
 
 //namespaces
