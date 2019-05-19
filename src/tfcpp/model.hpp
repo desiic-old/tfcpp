@@ -52,6 +52,7 @@ namespace tfcpp {
       //Tensor Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
       Placeholder Input    = Placeholder(R, DT_FLOAT);
       Placeholder Expected = Placeholder(R, DT_FLOAT);
+      Variable Weights;
 
     //constructors & methods
     public:

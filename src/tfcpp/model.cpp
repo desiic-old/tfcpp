@@ -19,7 +19,9 @@ namespace tfcpp {
   \brief Constructor
   */
   model::model(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes){
-    //
+    this->Num_Inputs   = Num_Inputs;
+    this->Hidden_Units = Hidden_Units;
+    this->Num_Classes  = Num_Classes;
   }
 
   /*!
