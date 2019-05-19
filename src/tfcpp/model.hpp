@@ -50,9 +50,10 @@ namespace tfcpp {
       //the first value in shape is batch size (?)
       //Tensor Input    = Tensor(DT_FLOAT, TensorShape({1,...}));
       //Tensor Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
-      Placeholder Input    = Placeholder(R, DT_FLOAT);
-      Placeholder Expected = Placeholder(R, DT_FLOAT);
-      Variable Weights;
+      Placeholder      Input    = Placeholder(R, DT_FLOAT);
+      Placeholder      Expected = Placeholder(R, DT_FLOAT);
+      vector<Variable> Weights;
+      vector<Variable> Biases;
 
     //constructors & methods
     public:
