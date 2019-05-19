@@ -52,15 +52,31 @@ namespace tfcpp {
       //the first value in shape is batch size (?)
       //Tensor Input    = Tensor(DT_FLOAT, TensorShape({1,...}));
       //Tensor Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
-      Placeholder      Input    = Placeholder(R, DT_FLOAT);
-      Placeholder      Expected = Placeholder(R, DT_FLOAT);
-      vector<Variable> Weights;
-      vector<Variable> Biases;
+      Placeholder Input    = Placeholder(R, DT_FLOAT);
+      Placeholder Expected = Placeholder(R, DT_FLOAT);
 
-    //constructors & methods
+      vector<Variable> Weights; //hidden layers
+      vector<Variable> Biases;  //hidden layers
+      vector<Relu>     Hiddens;
+
+      Variable* Output_Weight;
+      Variable* Output_Bias;
+      Identity* Output;
+
+      Softmax* Probs; //probabilities
+      Sum*     Loss;
+
+    //constructors & destructor
     public:
       model(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
       ~model();
+
+    //methods
+    public:
+      void init_weights_and_biases();
+      void create_hidden_layers();
+      void create_output_layer();
+      void finalise();
   };
 
 //namespaces
