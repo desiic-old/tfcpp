@@ -15,6 +15,7 @@ message("\n=====================================================================
 message("Base configs:")
 message("C++ standard: C++17")
 cmake_minimum_required(VERSION 3.10)
+add_definitions(-Wfatal-errors)
 set(CMAKE_CXX_STANDARD 17)
 set(Top "../..")
 

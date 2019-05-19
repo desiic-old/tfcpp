@@ -10,11 +10,11 @@
 //namespaces
 namespace tfcpp {
 
-/*!
-\brief Generic model class
-*/
-class model {
-};
+  /*!
+  \brief Generic model class
+  */
+  class model {
+  };
 
 //namespaces
 }

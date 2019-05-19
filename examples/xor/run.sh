@@ -22,6 +22,9 @@ rm -rf build;
 mkdir build;
 cd build;
 cmake ..;
+
+echo -e "\n================================================================================";
+echo "Building project...";
 make;
 
 #run

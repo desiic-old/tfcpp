@@ -3,19 +3,21 @@
 \brief Test XOR using TFCpp library
 */
 
-//c++ standard
+//core headers
 #include <iostream>
 
-//custom libs (generic)
+//custom headers (generic)
 #include <types.hpp>
 
-//custom libs (ML)
+//custom headers (ML)
 #include <tfcpp/t.hpp>           //functions
 #include <tfcpp/model.hpp>       //ML model class
 #include <tfcpp/miscs/utils.hpp> //utility class
 
-//namespaces
+//use core namespaces
 using namespace std;
+
+//use custom namespaces
 using namespace tfcpp;
 
 /*!
