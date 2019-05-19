@@ -9,6 +9,7 @@
 
 //core headers
 #include <vector>
+#include <initializer_list>
 
 //lib headers
 #include <tensorflow/cc/ops/standard_ops.h>         //operations
@@ -25,7 +26,8 @@ using namespace tensorflow;
 using namespace tensorflow::ops;
 
 //shortcuts
-namespace tf = tensorflow;
+using     ilong = initializer_list<long>;
+namespace tf    = tensorflow;
 
 //namespaces
 namespace tfcpp {
@@ -57,7 +59,7 @@ namespace tfcpp {
 
     //constructors & methods
     public:
-      model(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes);
+      model(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
       ~model();
   };
 

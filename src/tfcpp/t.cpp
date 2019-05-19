@@ -6,6 +6,7 @@
 //core headers
 #include <iostream>
 #include <vector>
+#include <initializer_list>
 
 //lib headers
 #include <tensorflow/cc/ops/standard_ops.h>         //operations
@@ -23,23 +24,35 @@
 //use core namespaces
 using namespace std;
 
+//shortcuts
+using ilong = initializer_list<long>;
+
 //namespaces
 namespace tfcpp {
 
   //namespace variables
-  Scope R = Scope::NewRootScope();
+  Scope         R    = Scope::NewRootScope();
+  ClientSession Sess = ClientSession(R); 
+
+  /*!
+  \brief Demangle typeid name,
+         Example: demangle_type(typeid(Some_Var).name())
+  */
+  string demangle_type(const char* Type_Id_Name){
+    return boost::core::demangle(Type_Id_Name);
+  }
 
   /*!
   \brief Init machine learning
   */
   void init_ml(){
-    //
+    cout <<"Root scope:\x20" <<demangle_type(typeid(R).name()) <<endl;
   }
 
   /*!
   \brief Build DNN classifier
   */
-  model* build_dnn_classifier(long Num_Inputs,vector<long> Hidden_Units,long Num_Classes){
+  model* build_dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes){
     return new model(Num_Inputs,Hidden_Units,Num_Classes);
   }
 
