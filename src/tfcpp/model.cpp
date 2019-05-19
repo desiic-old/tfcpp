@@ -143,6 +143,9 @@ namespace tfcpp {
   void model::finalise(){
     this->Probs = new Softmax(R, *this->Output);
     this->Loss  = new Sum(R, Square(R, Sub(R, this->Expected, *this->Probs)), {0,1});
+
+    //create optimiser
+    //TODO
   }
 
 //namespaces
