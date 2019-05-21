@@ -9,7 +9,7 @@
 
 //custom headers
 #include <tfcpp/t.hpp>
-#include <tfcpp/model.hpp>
+#include <tfcpp/ann/dnn-classifier.hpp>
 
 //use namespaces (core)
 using namespace std;
@@ -23,7 +23,7 @@ namespace tfcpp {
   /*!
   \brief Constructor
   */
-  model::model(long Num_Inputs,ilong Hidden_Units,long Num_Classes){
+  dnn_classifier::dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes){
     this->Num_Inputs   = Num_Inputs;
     this->Hidden_Units = Hidden_Units;
     this->Num_Classes  = Num_Classes;
@@ -32,7 +32,7 @@ namespace tfcpp {
   /*!
   \brief Model destructor
   */
-  model::~model(){
+  dnn_classifier::~dnn_classifier(){
     delete this->Output_Weight;
     delete this->Output_Bias;
     delete this->Output;
@@ -43,7 +43,7 @@ namespace tfcpp {
   /*!
   \brief Init the model
   */
-  void model::init_weights_and_biases(){
+  void dnn_classifier::init_weights_and_biases(){
 
     //create weights & biases (including output layer)
     long Num_Hiddens = this->Hidden_Units.size();
@@ -109,7 +109,7 @@ namespace tfcpp {
   /*!
   \brief Create hidden layers
   */
-  void model::create_hidden_layers(){
+  void dnn_classifier::create_hidden_layers(){
     long Num_Hiddens = this->Hidden_Units.size();
 
     for (long I=0; I<Num_Hiddens; I++){
@@ -129,7 +129,7 @@ namespace tfcpp {
   /*!
   \brief Create output
   */
-  void model::create_output_layer(){
+  void dnn_classifier::create_output_layer(){
     long Num_Hiddens = this->Hidden_Units.size();
     this->Output     = new Identity(R, Add(R, 
                          MatMul(R,this->Hiddens[Num_Hiddens-1],*this->Output_Weight), 
@@ -140,7 +140,7 @@ namespace tfcpp {
   /*!
   \brief Finalise with probabilities and loss
   */
-  void model::finalise(){
+  void dnn_classifier::finalise(){
     this->Probs = new Softmax(R, *this->Output);
     this->Loss  = new Sum(R, Square(R, Sub(R, this->Expected, *this->Probs)), {0,1});
 

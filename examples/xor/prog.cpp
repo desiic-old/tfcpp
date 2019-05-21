@@ -13,9 +13,9 @@
 #include <types.hpp>
 
 //custom headers (ML)
-#include <tfcpp/t.hpp>           //functions
-#include <tfcpp/model.hpp>       //ML model class
-#include <tfcpp/miscs/utils.hpp> //utility class
+#include <tfcpp/t.hpp>                  //functions
+#include <tfcpp/ann/dnn-classifier.hpp> //ML model class
+#include <tfcpp/miscs/utils.hpp>        //utility class
 
 //use core namespaces
 using namespace std;
@@ -51,7 +51,7 @@ int main(int Argc,char* Args[]){
 
   ilong Hidden_Units_Values = {4}; //1 layer of 4 neurons
 
-  model* Model = build_dnn_classifier(
+  dnn_classifier* Model = build_dnn_classifier(
     Num_Inputs   = 2,
     Hidden_Units = Hidden_Units_Values,
     Num_Classes  = 2

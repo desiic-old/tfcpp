@@ -32,9 +32,11 @@ include_directories(${Top}/src)
 message("\nSetting source files...")
 aux_source_directory(${Top}/src             Top_Files)
 aux_source_directory(${Top}/src/tfcpp       Tfcpp_Files)
+aux_source_directory(${Top}/src/tfcpp/ann   Tfcpp_Ann_Files)
 aux_source_directory(${Top}/src/tfcpp/miscs Tfcpp_Miscs_Files)
 message("${Top_Files}")
 message("${Tfcpp_Files}")
+message("${Tfcpp_Ann_Files}")
 message("${Tfcpp_Miscs_Files}")
 
 #set executable and target
@@ -43,6 +45,7 @@ add_executable(prog
   prog.cpp 
   ${Top_Files}
   ${Tfcpp_Files}
+  ${Tfcpp_Ann_Files}
   ${Tfcpp_Miscs_Files}
 )
 

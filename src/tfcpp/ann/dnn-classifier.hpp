@@ -38,7 +38,7 @@ namespace tfcpp {
   /*!
   \brief Generic model class
   */
-  class model {
+  class dnn_classifier {
 
     //properties
     public:
@@ -68,8 +68,8 @@ namespace tfcpp {
 
     //constructors & destructor
     public:
-      model(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
-      ~model();
+      dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
+      ~dnn_classifier();
 
     //methods
     public:

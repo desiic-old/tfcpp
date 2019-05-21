@@ -26,7 +26,7 @@
 #include <types.hpp>
 
 //custom headers (ML)
-#include <tfcpp/model.hpp>
+#include <tfcpp/ann/dnn-classifier.hpp>
 
 //use core namespaces
 using namespace std;
@@ -61,7 +61,7 @@ namespace tfcpp {
   /*!
   \brief Build a DNN model
   */
-  model* build_dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
+  dnn_classifier* build_dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
 
 //namespaces
 }
