@@ -147,7 +147,7 @@ namespace tfcpp {
     //create optimiser
     //optimiser function
     vector<Output>   Grad_Outputs;
-    vector<Variable> Vars;
+    vector<Output> Vars;
     long Num_Hiddens = this->Hidden_Units.size();
 
     for (long I=0; I<Num_Hiddens; I++)
