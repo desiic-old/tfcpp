@@ -15,7 +15,8 @@
 using namespace std;
 
 //shortcuts
-using ilong = initializer_list<long>;
+using ilong   = initializer_list<long>;
+using applygd = ApplyGradientDescent;
 
 //namespaces
 namespace tfcpp {
@@ -145,7 +146,6 @@ namespace tfcpp {
     this->Loss  = new Sum(R, Square(R, Sub(R, this->Expected, *this->Probs)), {0,1});
 
     //create optimiser
-    //optimiser function
     vector<Output> Grad_Outputs;
     vector<Output> Loss; 
     vector<Output> Vars;
@@ -161,10 +161,16 @@ namespace tfcpp {
     TF_CHECK_OK(
       AddSymbolicGradients(R, Loss, Vars, &Grad_Outputs)
     );
-    //auto Optim1 = ApplyGradientDescent(R, Weight1, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[0]});
-    //auto Optim2 = ApplyGradientDescent(R, Weight2, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[1]});
-    //auto Optim3 = ApplyGradientDescent(R, Bias1,   Cast(R,0.01,DT_FLOAT), {Grad_Outputs[2]});
-    //auto Optim4 = ApplyGradientDescent(R, Bias2,   Cast(R,0.01,DT_FLOAT), {Grad_Outputs[3]});
+
+    for (long I=0; I<Num_Hiddens; I++){
+      applygd Optim = ApplyGradientDescent(R, this->Weights[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[I]});
+      this->Optims.push_back(Optim);
+    }
+
+    for (long I=0; I<Num_Hiddens; I++){
+      applygd Optim = ApplyGradientDescent(R, this->Biases[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[Num_Hiddens+I]});
+      this->Optims.push_back(Optim);
+    } 
   }
 
 //namespaces

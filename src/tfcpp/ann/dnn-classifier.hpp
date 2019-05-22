@@ -26,8 +26,9 @@ using namespace tensorflow;
 using namespace tensorflow::ops;
 
 //shortcuts
-using     ilong = initializer_list<long>;
-namespace tf    = tensorflow;
+using     ilong   = initializer_list<long>;
+using     applygd = ApplyGradientDescent;
+namespace tf      = tensorflow;
 
 //namespaces
 namespace tfcpp {
@@ -52,19 +53,19 @@ namespace tfcpp {
       //the first value in shape is batch size (?)
       //Tensor Inp      = Tensor(DT_FLOAT, TensorShape({1,...}));
       //Tensor Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
-      Placeholder Inp      = Placeholder(R, DT_FLOAT);
-      Placeholder Expected = Placeholder(R, DT_FLOAT);
+      Placeholder      Inp      = Placeholder(R, DT_FLOAT);
+      Placeholder      Expected = Placeholder(R, DT_FLOAT);
 
       vector<Variable> Weights; //hidden layers
       vector<Variable> Biases;  //hidden layers
       vector<Relu>     Hiddens;
 
-      Variable* Out_Weight;
-      Variable* Out_Bias;
-      Identity* Out;
-
-      Softmax* Probs; //probabilities
-      Sum*     Loss;
+      Variable*        Out_Weight;
+      Variable*        Out_Bias;
+      Identity*        Out;
+      Softmax*         Probs; //probabilities
+      Sum*             Loss;
+      vector<applygd>  Optims;
 
     //constructors & destructor
     public:
