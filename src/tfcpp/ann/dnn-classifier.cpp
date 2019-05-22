@@ -146,8 +146,11 @@ namespace tfcpp {
 
     //create optimiser
     //optimiser function
-    vector<Output>   Grad_Outputs;
+    vector<Output> Grad_Outputs;
+    vector<Output> Loss; 
     vector<Output> Vars;
+
+    Loss.push_back(this->Loss);
     long Num_Hiddens = this->Hidden_Units.size();
 
     for (long I=0; I<Num_Hiddens; I++)
@@ -156,7 +159,7 @@ namespace tfcpp {
       Vars.push_back(this->Biases[I]);
 
     TF_CHECK_OK(
-      AddSymbolicGradients(R, {Loss}, Vars, &Grad_Outputs)
+      AddSymbolicGradients(R, Loss, Vars, &Grad_Outputs)
     );
     //auto Optim1 = ApplyGradientDescent(R, Weight1, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[0]});
     //auto Optim2 = ApplyGradientDescent(R, Weight2, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[1]});
