@@ -16,9 +16,9 @@
 #include <types.hpp>
 
 //custom libs (ML)
-#include <tfcpp/t.hpp>           //functions
-#include <tfcpp/model.hpp>       //ML model
-#include <tfcpp/miscs/utils.hpp> //utilities
+#include <tfcpp/t.hpp>                  //functions
+#include <tfcpp/ann/dnn-classifier.hpp> //ML model
+#include <tfcpp/miscs/utils.hpp>        //utilities
 
 //namespaces
 using namespace std;

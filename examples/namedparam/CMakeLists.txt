@@ -11,6 +11,7 @@ find_package(TensorflowCC REQUIRED)
 #include dirs
 include_directories(../../libs)
 include_directories(../../src)
+include_directories(../../src/ann)
 
 #linking
 add_executable(prog prog.cpp)
