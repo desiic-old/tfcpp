@@ -150,7 +150,7 @@ namespace tfcpp {
     vector<Output> Loss; 
     vector<Output> Vars;
 
-    Loss.push_back(this->Loss);
+    Loss.push_back(*this->Loss);
     long Num_Hiddens = this->Hidden_Units.size();
 
     for (long I=0; I<Num_Hiddens; I++)
