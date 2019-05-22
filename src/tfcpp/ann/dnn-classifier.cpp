@@ -139,7 +139,7 @@ namespace tfcpp {
   }
 
   /*!
-  \brief Finalise with probabilities and loss
+  \brief Finalise with probabilities, loss, and gradients
   */
   void dnn_classifier::finalise(){
     this->Probs = new Softmax(R, *this->Out);
