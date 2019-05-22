@@ -33,9 +33,9 @@ namespace tfcpp {
   \brief Model destructor
   */
   dnn_classifier::~dnn_classifier(){
-    delete this->Output_Weight;
-    delete this->Output_Bias;
-    delete this->Output;
+    delete this->Out_Weight;
+    delete this->Out_Bias;
+    delete this->Out;
     delete this->Probs;
     delete this->Loss;
   }
@@ -57,7 +57,7 @@ namespace tfcpp {
       else
       if (I==Num_Hiddens){ //output layer
         long Last_Hidden_Size = this->Hidden_Units[Num_Hiddens-1];
-        this->Output_Weight   = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
+        this->Out_Weight   = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
       }
       else { //other hidden layers
         long Prev_Num_Units = this->Hidden_Units[I-1];
@@ -65,7 +65,7 @@ namespace tfcpp {
       }
 
       if (I==Num_Hiddens)
-        this->Output_Bias = new Variable(R, {Num_Classes}, DT_FLOAT);
+        this->Out_Bias = new Variable(R, {Num_Classes}, DT_FLOAT);
       else
         this->Biases.push_back(Variable(R, {Num_Units}, DT_FLOAT));
     }//hidden units loop
@@ -85,9 +85,9 @@ namespace tfcpp {
       else
       if (I==Num_Hiddens){ //output layer
         long Prev_Num_Units = this->Hidden_Units[Num_Hiddens-1];
-        Weight_Init         = new Assign(R, *this->Output_Weight, 
+        Weight_Init         = new Assign(R, *this->Out_Weight, 
                                   RandomNormal(R, {(int)Prev_Num_Units,(int)Num_Classes}, DT_FLOAT));
-        Bias_Init           = new Assign(R, *this->Output_Bias,  
+        Bias_Init           = new Assign(R, *this->Out_Bias,  
                                   RandomNormal(R, {(int)Num_Classes}, DT_FLOAT)); 
       }  
       else { //other hidden layer
@@ -116,7 +116,7 @@ namespace tfcpp {
       long Num_Units = this->Hidden_Units[I];
 
       if (I==0){
-        Relu Layer = Relu(R, Add(R, MatMul(R,this->Input, this->Weights[I]), this->Biases[I]));
+        Relu Layer = Relu(R, Add(R, MatMul(R,this->Inp, this->Weights[I]), this->Biases[I]));
         this->Hiddens.push_back(Layer);
       }
       else{
@@ -131,9 +131,9 @@ namespace tfcpp {
   */
   void dnn_classifier::create_output_layer(){
     long Num_Hiddens = this->Hidden_Units.size();
-    this->Output     = new Identity(R, Add(R, 
-                         MatMul(R,this->Hiddens[Num_Hiddens-1],*this->Output_Weight), 
-                         *this->Output_Bias
+    this->Out       = new Identity(R, Add(R, 
+                         MatMul(R,this->Hiddens[Num_Hiddens-1],*this->Out_Weight), 
+                         *this->Out_Bias
                        ));
   }
 
@@ -141,11 +141,27 @@ namespace tfcpp {
   \brief Finalise with probabilities and loss
   */
   void dnn_classifier::finalise(){
-    this->Probs = new Softmax(R, *this->Output);
+    this->Probs = new Softmax(R, *this->Out);
     this->Loss  = new Sum(R, Square(R, Sub(R, this->Expected, *this->Probs)), {0,1});
 
     //create optimiser
-    //TODO
+    //optimiser function
+    vector<Output>   Grad_Outputs;
+    vector<Variable> Vars;
+    long Num_Hiddens = this->Hidden_Units.size();
+
+    for (long I=0; I<Num_Hiddens; I++)
+      Vars.push_back(this->Weights[I]);
+    for (long I=0; I<Num_Hiddens; I++)
+      Vars.push_back(this->Biases[I]);
+
+    TF_CHECK_OK(
+      AddSymbolicGradients(R, {Loss}, Vars, &Grad_Outputs)
+    );
+    //auto Optim1 = ApplyGradientDescent(R, Weight1, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[0]});
+    //auto Optim2 = ApplyGradientDescent(R, Weight2, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[1]});
+    //auto Optim3 = ApplyGradientDescent(R, Bias1,   Cast(R,0.01,DT_FLOAT), {Grad_Outputs[2]});
+    //auto Optim4 = ApplyGradientDescent(R, Bias2,   Cast(R,0.01,DT_FLOAT), {Grad_Outputs[3]});
   }
 
 //namespaces

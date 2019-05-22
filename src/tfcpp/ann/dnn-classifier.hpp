@@ -50,18 +50,18 @@ namespace tfcpp {
       //but not deprecated in future, seen in 2.0 array_ops.
       //another way: use Tensor instead.
       //the first value in shape is batch size (?)
-      //Tensor Input    = Tensor(DT_FLOAT, TensorShape({1,...}));
+      //Tensor Inp      = Tensor(DT_FLOAT, TensorShape({1,...}));
       //Tensor Expected = Tensor(DT_FLOAT, TensorShape({1,...}));
-      Placeholder Input    = Placeholder(R, DT_FLOAT);
+      Placeholder Inp      = Placeholder(R, DT_FLOAT);
       Placeholder Expected = Placeholder(R, DT_FLOAT);
 
       vector<Variable> Weights; //hidden layers
       vector<Variable> Biases;  //hidden layers
       vector<Relu>     Hiddens;
 
-      Variable* Output_Weight;
-      Variable* Output_Bias;
-      Identity* Output;
+      Variable* Out_Weight;
+      Variable* Out_Bias;
+      Identity* Out;
 
       Softmax* Probs; //probabilities
       Sum*     Loss;
