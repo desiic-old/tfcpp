@@ -52,12 +52,12 @@ typedef long double        ldouble;  //--     --     8bytes
 /*!
 \brief Template for named parameters to functions/methods
 */
-template <class Type>
+template <typename Type>
 class type {
   public:
-    Type operator= (Type Param){
+    Type operator=(Type Param){
       return Param;
-    }
+    };
 };
 
 //include guard

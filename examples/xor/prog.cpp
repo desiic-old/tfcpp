@@ -57,6 +57,55 @@ int main(int Argc,char* Args[]){
     Num_Classes  = 2
   );
 
+  //set training data (xor)
+  vector<vector<long>> Inps;
+  vector<long>         Expecteds; //labels
+
+  Inps.push_back(vector<long>({0,0}));
+  Inps.push_back(vector<long>({0,1}));
+  Inps.push_back(vector<long>({1,0}));
+  Inps.push_back(vector<long>({1,1}));
+
+  Expecteds = {0,1,1,0};
+  Model->set_training_data(Inps,Expecteds);
+
+  //train and eval
+  cout <<"\nTraining..." <<endl;
+  long Steps = 5000;    
+
+  for (long I=0; I<Steps; I++){
+    Model->set_batch(Model->get_rand_batch(4));
+    Model->train();
+
+    //log after every 100 steps
+    if ((I+1)%100 == 0) {
+      float Loss = Model->get_current_loss();
+      cout <<"Loss after\x20" <<I+1 <<"\x20steps:\x20" <<Loss <<endl;
+    }//log
+  }//steps
+
+  //start inference
+  cout <<"\nInferring the original training data..." <<endl;  
+
+  for (long I=0; I<Inps.size(); I++){    
+    vector<long>  Sample = Inps[I];
+    vector<float> Probs  = Model->infer(Sample); //probabilities
+    long          Class  = argmax<float>(Probs);
+
+    /*
+    Output probabilities:
+            Class0 Class1
+    0 ^ 0 = 1,     0
+    0 ^ 1 = 0,     1
+    1 ^ 0 = 0,     1
+    1 ^ 1 = 1,     0
+    */
+    long X1 = Sample[0];
+    long X2 = Sample[1];
+    cout <<X1 <<" ^ " <<X2 <<" = " <<Class <<" (" <<Probs[1] <<")" <<endl;
+  }
+
+  //free memory
   delete Model;
 }
 

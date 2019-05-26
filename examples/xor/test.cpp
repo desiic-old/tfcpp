@@ -1,21 +1,31 @@
 #include <iostream>
-#include <vector>
-
 using namespace std;
 
-class c{
+//headers
+template <typename T>
+class c {
   public:
-    c(initializer_list<long> a);
+    static void print(T value);
 };
 
-c::c(initializer_list<long> a){
-  vector<long> v = a;
-  cout <<typeid(v).name() <<endl;
-  cout <<v.size() <<endl;
+template <typename T>
+void print(T value);
+
+//definitions
+template <typename T>
+void c<T>::print(T value){
+  cout <<value <<endl;
 }
 
+template <typename T>
+void print(T value){
+  cout <<value <<endl;
+}
+
+//entry point
 int main(){
-  c foobar2 = c({1,2,3});
+  c<const char*>::print("foo");
+  print<const char*>("bar");
 }
 
-//
+//eof

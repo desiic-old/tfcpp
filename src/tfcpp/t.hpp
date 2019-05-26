@@ -53,6 +53,10 @@ namespace tfcpp {
   */
   string demangle_type(const char* Type_Id_Name);
 
+  //get index of max value
+  template <typename Type>
+  long argmax(vector<Type> List);
+
   /*!
   \brief Initialise machine learning
   */

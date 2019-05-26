@@ -42,7 +42,7 @@ message("${Tfcpp_Miscs_Files}")
 #set executable and target
 message("\nAdding executable...")
 add_executable(prog 
-  prog.cpp 
+  prog.cpp     
   ${Top_Files}
   ${Tfcpp_Files}
   ${Tfcpp_Ann_Files}

@@ -4,8 +4,9 @@
 */
 
 //core headers
-#include <vector>
 #include <initializer_list>
+#include <vector>
+#include <utility>
 
 //custom headers
 #include <tfcpp/t.hpp>
@@ -16,6 +17,7 @@ using namespace std;
 
 //shortcuts
 using ilong   = initializer_list<long>;
+using batch   = pair<vector<vector<long>>,vector<vector<long>>>; //pair of input batch & expected batch
 using applygd = ApplyGradientDescent;
 
 //namespaces
@@ -58,7 +60,7 @@ namespace tfcpp {
       else
       if (I==Num_Hiddens){ //output layer
         long Last_Hidden_Size = this->Hidden_Units[Num_Hiddens-1];
-        this->Out_Weight   = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
+        this->Out_Weight      = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
       }
       else { //other hidden layers
         long Prev_Num_Units = this->Hidden_Units[I-1];
@@ -132,16 +134,16 @@ namespace tfcpp {
   */
   void dnn_classifier::create_output_layer(){
     long Num_Hiddens = this->Hidden_Units.size();
-    this->Out       = new Identity(R, Add(R, 
+    this->Out        = new Identity(R, Add(R, 
                          MatMul(R,this->Hiddens[Num_Hiddens-1],*this->Out_Weight), 
                          *this->Out_Bias
                        ));
   }
 
   /*!
-  \brief Finalise with probabilities, loss, and gradients
+  \brief Complete model with probabilities, loss, and gradients
   */
-  void dnn_classifier::finalise(){
+  void dnn_classifier::complete_model(){
     this->Probs = new Softmax(R, *this->Out);
     this->Loss  = new Sum(R, Square(R, Sub(R, this->Expected, *this->Probs)), {0,1});
 
@@ -171,6 +173,161 @@ namespace tfcpp {
       applygd Optim = ApplyGradientDescent(R, this->Biases[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[Num_Hiddens+I]});
       this->Optims.push_back(Optim);
     } 
+  }
+
+  /*!
+  \brief Set training data
+  */
+  void dnn_classifier::set_training_data(vector<vector<long>> Inputs,vector<long> Labels){
+    
+    //add input data
+    for (vector<long> const& Inp: Inputs){
+      vector<long> Values = Inp;
+      this->All_Inps.push_back(Values);
+    }
+
+    //create expected probs from labels
+    for (long Label: Labels){
+      vector<long> Values;
+
+      for (long I=0; I<this->Num_Classes; I++)
+        if (I==Label) Values.push_back(1);
+        else          Values.push_back(0);
+
+      this->All_Expecteds.push_back(Values);
+    }
+  }//set training data
+
+  /*!
+  \brief Get random batch from set training data
+  */
+  batch dnn_classifier::get_rand_batch(long Size){
+
+    //create index list to shuffle,
+    //can't shuffle All_Inps or All_Expecteds alone as they have to match each other.
+    vector<long> Indices;
+    for (long I=0; I<this->All_Inps.size(); I++)
+      Indices[I] = I;
+
+    //shuffle
+    random_shuffle(Indices.begin(),Indices.end());
+
+    //get first batch
+    vector<vector<long>> Inps;
+    vector<vector<long>> Expecteds;
+
+    for (long I=0; I<Size; I++){
+      long Index = Indices[I];
+      vector<long> Inp      = this->All_Inps[Index];
+      vector<long> Expected = this->All_Expecteds[Index];
+
+      Inps.push_back(Inp);
+      Expecteds.push_back(Expected);
+    }
+
+    //build pair
+    batch Pair = {Inps,Expecteds};
+    return Pair;
+  }
+
+  /*!
+  \brief A batch for training
+  */
+  void dnn_classifier::set_batch(batch Batch){
+    long Size = Batch.first.size(); //=second.size()
+
+    //create data tensors and set data
+    this->Inps      = Tensor(DT_FLOAT, TensorShape({(int)Size, (int)this->Num_Inputs}));
+    this->Expecteds = Tensor(DT_FLOAT, TensorShape({(int)Size, (int)this->Num_Classes}));    
+
+    //data for inputs (network feed)
+    //flat<float>(): a get/set function
+    long I=0;
+    for (vector<long> const& Inp: Batch.first)
+      for (long Value: Inp){
+        this->Inps.flat<float>()(I) = Value;
+        I++;
+      }
+
+    //data for expecteds (loss calculation)
+    //flat<float>(): a get/set function
+    I=0;
+    for (vector<long> const& Expected: Batch.second)
+      for (long Value: Expected){
+        this->Expecteds.flat<float>()(I) = Value;
+        I++;
+      }
+  }
+
+  /*!
+  \brief Train using set batch
+  */
+  void dnn_classifier::train() {
+
+    /*
+    //apply optimisation on layers
+    vector<Operation> Ops;
+    for (long I=0; I<this->Optims.size(); I++)
+      Ops.push_back((Operation)this->Optims[I]);
+
+    //output op
+    Ops.push_back((Operation)this->Out);
+    */
+
+    //run
+    TF_CHECK_OK(
+      Sess.Run(
+        {{this->Inp,this->Inps},{this->Expected,this->Expecteds}}, 
+        {this->Optims[0],this->Optims[1],*this->Out}, 
+        nullptr
+      )
+    );    
+  }
+
+  /*!
+  \brief Get current loss
+  */
+  float dnn_classifier::get_current_loss(){
+    vector<Tensor> Outputs;
+
+    TF_CHECK_OK(
+      Sess.Run(
+        {{this->Inp,this->Inps},{this->Expected,this->Expecteds}}, 
+        {*this->Loss}, 
+        &Outputs
+      )
+    );
+
+    //loss is scalar, only 1 value in outputs
+    //scalar<float>(): a get/set function
+    return Outputs[0].scalar<float>()();
+  }
+
+  /*!
+  \brief Infer a single input
+  */
+  vector<float> dnn_classifier::infer(vector<long> Inpv){
+    vector<Tensor> Outputs;
+
+    //convert to tensor
+    Tensor Inp = Tensor(DT_FLOAT, TensorShape({1,(int)Inpv.size()}));
+
+    for (long I=0; I<Inpv.size(); I++)
+      Inp.flat<float>()(I) = Inpv[I];
+
+    //run
+    TF_CHECK_OK(
+      Sess.Run({{this->Inp,Inp}}, {*this->Out}, &Outputs)
+    );
+
+    //extract output values
+    //scalar<float>(): a get/set function
+    vector<float> Probs;
+
+    for (long I=0; I<this->Num_Classes; I++)
+      Probs.push_back(Outputs[I].scalar<float>()());
+
+    return Probs;
   }
 
 //namespaces

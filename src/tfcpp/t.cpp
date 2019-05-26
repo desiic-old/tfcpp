@@ -43,6 +43,23 @@ namespace tfcpp {
   }
 
   /*!
+  \brief Get index of max value (float)
+  */
+  template <class Type>
+  long argmax(vector<Type> List){
+    Type Max       = numeric_limits<Type>::lowest();
+    long Max_Index = -1;
+
+    for (long I=0; I<List.size(); I++)
+      if (List[I]>Max){
+        Max       = List[I];
+        Max_Index = I;
+      }
+
+    return Max_Index;
+  }
+
+  /*!
   \brief Init machine learning
   */
   void init_ml(){
@@ -57,9 +74,14 @@ namespace tfcpp {
     Model->init_weights_and_biases();
     Model->create_hidden_layers();
     Model->create_output_layer();
-    Model->finalise();
+    Model->complete_model();
     return Model;
   }
+
+  //specify types for templates coz this source file is not using this template,
+  //and compiler won't know how many functions to generate from the template.
+  template long argmax(vector<float> List);
+  template long argmax(vector<long>  List);
 
 //namespaces
 }
