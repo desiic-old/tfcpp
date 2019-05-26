@@ -74,8 +74,7 @@ int main(int Argc,char* Args[]){
   long Steps = 5000;      
 
   for (long I=0; I<Steps; I++){
-    batch Batch = Model->get_rand_batch(4); 
-    Model->set_batch(Batch);    
+    Model->set_batch(Model->get_rand_batch(4));    
     Model->train();
 
     //log after every 100 steps

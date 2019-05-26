@@ -306,18 +306,18 @@ namespace tfcpp {
   /*!
   \brief Infer a single input
   */
-  vector<float> dnn_classifier::infer(vector<long> Inpv){
+  vector<float> dnn_classifier::infer(vector<long> Sample){
     vector<Tensor> Outputs;
 
     //convert to tensor
-    Tensor Inp = Tensor(DT_FLOAT, TensorShape({1,(int)Inpv.size()}));
+    Tensor Infer_Inp = Tensor(DT_FLOAT, TensorShape({1,(int)this->Num_Inputs}));
 
-    for (long I=0; I<Inpv.size(); I++)
-      Inp.flat<float>()(I) = Inpv[I];
+    for (long I=0; I<this->Num_Inputs; I++)
+      Infer_Inp.flat<float>()(I) = Sample[I];
 
     //run
     TF_CHECK_OK(
-      Sess.Run({{this->Inp,Inp}}, {*this->Out}, &Outputs)
+      Sess.Run({{this->Inp,Infer_Inp}}, {*this->Out}, &Outputs)
     );
 
     //extract output values

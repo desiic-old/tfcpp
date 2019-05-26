@@ -96,7 +96,7 @@ namespace tfcpp {
       void          set_batch(batch Batch);
       void          train();
       float         get_current_loss();
-      vector<float> infer(vector<long> Inp); //probability vector
+      vector<float> infer(vector<long> Sample); //probability vector
   };
 
 //namespaces
