@@ -207,7 +207,7 @@ namespace tfcpp {
     //can't shuffle All_Inps or All_Expecteds alone as they have to match each other.
     vector<long> Indices;
     for (long I=0; I<this->All_Inps.size(); I++)
-      Indices[I] = I;
+      Indices.push_back(I);
 
     //shuffle
     random_shuffle(Indices.begin(),Indices.end());

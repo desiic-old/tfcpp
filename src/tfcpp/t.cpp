@@ -35,6 +35,13 @@ namespace tfcpp {
   ClientSession Sess = ClientSession(R); 
 
   /*!
+  \brief Exit with zero status
+  */
+  void exit(){
+    std::exit(0);
+  }
+
+  /*!
   \brief Demangle typeid name,
          Example: demangle_type(typeid(Some_Var).name())
   */

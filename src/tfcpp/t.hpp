@@ -46,25 +46,20 @@ namespace tfcpp {
   extern Scope         R;
   extern ClientSession Sess;
 
-  /*!
-  \brief Demangle typeid name,
-         Example: demangle_type(typeid(Some_Var).name())
-         https://stackoverflow.com/a/34916852/5581893
-  */
+  //exit with zero status
+  void exit();
+
+  //demangle typeid name
   string demangle_type(const char* Type_Id_Name);
 
   //get index of max value
   template <typename Type>
   long argmax(vector<Type> List);
 
-  /*!
-  \brief Initialise machine learning
-  */
+  //initialise machine learning
   void init_ml();
 
-  /*!
-  \brief Build a DNN model
-  */
+  //build a DNN model
   dnn_classifier* build_dnn_classifier(long Num_Inputs,ilong Hidden_Units,long Num_Classes);
 
 //namespaces

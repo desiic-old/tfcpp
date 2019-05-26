@@ -71,10 +71,11 @@ int main(int Argc,char* Args[]){
 
   //train and eval
   cout <<"\nTraining..." <<endl;
-  long Steps = 5000;    
+  long Steps = 5000;      
 
   for (long I=0; I<Steps; I++){
-    Model->set_batch(Model->get_rand_batch(4));
+    batch Batch = Model->get_rand_batch(4); 
+    Model->set_batch(Batch);    
     Model->train();
 
     //log after every 100 steps
