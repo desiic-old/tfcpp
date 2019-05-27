@@ -1,32 +1,19 @@
 #include <iostream>
+#include <tuple>
 using namespace std;
 
-class c {
-  public:
-    long V;
-
-  public:
-    void operator()(long Sv); //set
-    long operator()();        //get
-};
-
-void c::operator()(long Sv){
-  this->V = Sv;
-}
-
-long c::operator()(){
-  return this->V;
-}
-
-c Var;
-
-c & get_var(){
-  return Var;
+template <typename... types>
+void print(types... Params){
+  long        Size   = sizeof...(Params);
+  long        Param1 = get<0>(tie(Params...));
+  const char* Param2 = get<1>(tie(Params...));
+  
+  cout <<Size <<endl;
+  cout <<Param1 <<" " <<Param2 <<endl;
 }
 
 int main(){
-  get_var()(999);
-  cout <<get_var()() <<endl;
+  print(123, "foobar");
 }
 
 //eof
