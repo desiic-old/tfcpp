@@ -241,7 +241,7 @@ namespace tfcpp {
     this->Expecteds = Tensor(DT_FLOAT, TensorShape({(int)Size, (int)this->Num_Classes}));    
 
     //data for inputs (network feed)
-    //flat<float>(): a get/set function
+    //flat<float>(): returns an instance of a class with set/get overloads of '()'
     long I=0;
     for (vector<long> const& Inp: Batch.first)
       for (long Value: Inp){
@@ -250,7 +250,7 @@ namespace tfcpp {
       }
 
     //data for expecteds (loss calculation)
-    //flat<float>(): a get/set function
+    //flat<float>(): returns an instance of a class with set/get overloads of '()'
     I=0;
     for (vector<long> const& Expected: Batch.second)
       for (long Value: Expected){
@@ -299,7 +299,7 @@ namespace tfcpp {
     );
 
     //loss is scalar, only 1 value in outputs
-    //scalar<float>(): a get/set function
+    //scalar<float>(): returns an instance of a class with set/get overloads of '()'
     return Outputs[0].scalar<float>()();
   }
 
@@ -321,7 +321,7 @@ namespace tfcpp {
     );
 
     //extract output values
-    //scalar<float>(): a get/set function
+    //scalar<float>(): returns an instance of a class with set/get overloads of '()'
     vector<float> Probs;
 
     for (long I=0; I<this->Num_Classes; I++)

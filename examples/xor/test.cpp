@@ -1,31 +1,32 @@
 #include <iostream>
 using namespace std;
 
-//headers
-template <typename T>
 class c {
   public:
-    static void print(T value);
+    long V;
+
+  public:
+    void operator()(long Sv); //set
+    long operator()();        //get
 };
 
-template <typename T>
-void print(T value);
-
-//definitions
-template <typename T>
-void c<T>::print(T value){
-  cout <<value <<endl;
+void c::operator()(long Sv){
+  this->V = Sv;
 }
 
-template <typename T>
-void print(T value){
-  cout <<value <<endl;
+long c::operator()(){
+  return this->V;
 }
 
-//entry point
+c Var;
+
+c & get_var(){
+  return Var;
+}
+
 int main(){
-  c<const char*>::print("foo");
-  print<const char*>("bar");
+  get_var()(999);
+  cout <<get_var()() <<endl;
 }
 
 //eof
