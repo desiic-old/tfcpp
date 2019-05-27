@@ -133,6 +133,11 @@ int main() {
     TF_CHECK_OK(
       Sess.Run({{Input,Infer_Inputs}}, {Layer2}, &Outputs)
     );
+
+    //NOTE THAT THE OUTPUT LAYER HERE COMES WITH ONLY 1 NEURON,
+    //SO 'Outputs[0].scalar<float>()' WORKS OK, TENSOR HAS ONLY 1 VALUE.
+    //BUT WHEN THERE ARE MULTIPLE OUTPUT NEURONS,
+    //PLEASE USE: Outputs[0].flat<float>()(0..Num_Output_Neurons-1)
     cout <<X1 <<" ^ " <<X2 <<" = " <<Outputs[0].scalar<float>() <<endl;
   }
 }//main

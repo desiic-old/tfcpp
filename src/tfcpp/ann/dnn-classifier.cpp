@@ -300,6 +300,7 @@ namespace tfcpp {
 
     //loss is scalar, only 1 value in outputs
     //scalar<float>(): returns an instance of a class with set/get overloads of '()'
+    //only 1 value in tensor this->Loss, so 'scalar' can be used here.
     return Outputs[0].scalar<float>()();
   }
 
