@@ -104,7 +104,7 @@ int main(int Argc,char* Args[]){
     */
     long X1 = Sample[0];
     long X2 = Sample[1];
-    cout <<X1 <<" ^ " <<X2 <<" = " <<Class <<" (" <<Probs[1] <<")" <<endl;
+    cout <<fixed <<X1 <<" ^ " <<X2 <<" = " <<Class <<" (" <<Probs[1] <<")" <<endl;
   }
 
   //free memory
