@@ -317,7 +317,7 @@ namespace tfcpp {
 
     //run
     TF_CHECK_OK(
-      Sess.Run({{this->Inp,Infer_Inp}}, {*this->Out}, &Outputs)
+      Sess.Run({{this->Inp,Infer_Inp}}, {*this->Probs}, &Outputs)
     );
 
     //extract output values
@@ -325,7 +325,7 @@ namespace tfcpp {
     vector<float> Probs;
 
     for (long I=0; I<this->Num_Classes; I++)
-      Probs.push_back(Outputs[I].scalar<float>()());
+      Probs.push_back(Outputs[0].flat<float>()(I));
 
     return Probs;
   }
