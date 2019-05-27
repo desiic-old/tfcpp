@@ -44,7 +44,7 @@ namespace tfcpp {
   }
 
   /*!
-  \brief Init the model
+  \brief Init the model weights & biases (all hidden layers + output layer)
   */
   void dnn_classifier::init_weights_and_biases(){
 
@@ -58,19 +58,19 @@ namespace tfcpp {
         this->Weights.push_back(Variable(R, {Num_Inputs,Num_Units}, DT_FLOAT));
       }
       else
-      if (I==Num_Hiddens){ //output layer
-        long Last_Hidden_Size = this->Hidden_Units[Num_Hiddens-1];
-        this->Out_Weight      = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
-      }
-      else { //other hidden layers
+      if (I<Num_Hiddens) { //other hidden layers
         long Prev_Num_Units = this->Hidden_Units[I-1];
         this->Weights.push_back(Variable(R, {Prev_Num_Units,Num_Units}, DT_FLOAT));
       }
+      else { //output layer
+        long Last_Hidden_Size = this->Hidden_Units[Num_Hiddens-1];
+        this->Out_Weight      = new Variable(R, {Last_Hidden_Size,Num_Classes}, DT_FLOAT);
+      }      
 
-      if (I==Num_Hiddens)
-        this->Out_Bias = new Variable(R, {Num_Classes}, DT_FLOAT);
-      else
+      if (I<Num_Hiddens) //hidden layers
         this->Biases.push_back(Variable(R, {Num_Units}, DT_FLOAT));
+      else //output layer
+        this->Out_Bias = new Variable(R, {Num_Classes}, DT_FLOAT);        
     }//hidden units loop
 
     //init weights and biases
@@ -86,19 +86,19 @@ namespace tfcpp {
                           RandomNormal(R,{(int)Num_Units}, DT_FLOAT)); 
       }
       else
-      if (I==Num_Hiddens){ //output layer
-        long Prev_Num_Units = this->Hidden_Units[Num_Hiddens-1];
-        Weight_Init         = new Assign(R, *this->Out_Weight, 
-                                  RandomNormal(R, {(int)Prev_Num_Units,(int)Num_Classes}, DT_FLOAT));
-        Bias_Init           = new Assign(R, *this->Out_Bias,  
-                                  RandomNormal(R, {(int)Num_Classes}, DT_FLOAT)); 
-      }  
-      else { //other hidden layer
+      if (I<Num_Hiddens) { //other hidden layer
         long Prev_Num_Units = this->Hidden_Units[I-1];
         Weight_Init         = new Assign(R, this->Weights[I], 
                                   RandomNormal(R, {(int)Prev_Num_Units,(int)Num_Units}, DT_FLOAT));
         Bias_Init           = new Assign(R, this->Biases[I],  
                                   RandomNormal(R, {(int)Num_Units}, DT_FLOAT));         
+      }
+      else { //output layer
+        long Prev_Num_Units = this->Hidden_Units[Num_Hiddens-1];
+        Weight_Init         = new Assign(R, *this->Out_Weight, 
+                                  RandomNormal(R, {(int)Prev_Num_Units,(int)Num_Classes}, DT_FLOAT));
+        Bias_Init           = new Assign(R, *this->Out_Bias,  
+                                  RandomNormal(R, {(int)Num_Classes}, DT_FLOAT)); 
       }//if index
 
       TF_CHECK_OK(
@@ -134,7 +134,8 @@ namespace tfcpp {
   */
   void dnn_classifier::create_output_layer(){
     long Num_Hiddens = this->Hidden_Units.size();
-    this->Out        = new Identity(R, Add(R, 
+    this->Out        = new Identity(R, 
+                       Add(R, 
                          MatMul(R,this->Hiddens[Num_Hiddens-1],*this->Out_Weight), 
                          *this->Out_Bias
                        ));
@@ -149,19 +150,27 @@ namespace tfcpp {
 
     //create optimiser
     vector<Output> Grad_Outputs;
-    vector<Output> Loss; 
+    vector<Output> Losses; 
     vector<Output> Vars;
 
-    Loss.push_back(*this->Loss);
+    Losses.push_back(*this->Loss);
     long Num_Hiddens = this->Hidden_Units.size();
 
+    //weights
     for (long I=0; I<Num_Hiddens; I++)
       Vars.push_back(this->Weights[I]);
+    
+    Vars.push_back(*this->Out_Weight);
+
+    //biases
     for (long I=0; I<Num_Hiddens; I++)
       Vars.push_back(this->Biases[I]);
 
+    Vars.push_back(*this->Out_Bias);
+
+    //add gradients
     TF_CHECK_OK(
-      AddSymbolicGradients(R, Loss, Vars, &Grad_Outputs)
+      AddSymbolicGradients(R, Losses, Vars, &Grad_Outputs)
     );
 
     for (long I=0; I<Num_Hiddens; I++){
@@ -169,10 +178,16 @@ namespace tfcpp {
       this->Optims.push_back(Optim);
     }
 
+    applygd Outw_Optim = ApplyGradientDescent(R, *this->Out_Weight, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[Num_Hiddens]});
+    this->Optims.push_back(Outw_Optim);
+
     for (long I=0; I<Num_Hiddens; I++){
-      applygd Optim = ApplyGradientDescent(R, this->Biases[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[Num_Hiddens+I]});
+      applygd Optim = ApplyGradientDescent(R, this->Biases[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[Num_Hiddens+1+I]});
       this->Optims.push_back(Optim);
     } 
+
+    applygd Outb_Optim = ApplyGradientDescent(R, *this->Out_Bias, Cast(R,0.01,DT_FLOAT), {Grad_Outputs[2*Num_Hiddens+1]});
+    this->Optims.push_back(Outb_Optim);
   }
 
   /*!
