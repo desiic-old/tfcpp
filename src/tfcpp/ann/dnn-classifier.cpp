@@ -264,21 +264,19 @@ namespace tfcpp {
   */
   void dnn_classifier::train() {
 
-    /*
     //apply optimisation on layers
-    vector<Operation> Ops;
+    vector<Output> Ops;
     for (long I=0; I<this->Optims.size(); I++)
-      Ops.push_back((Operation)this->Optims[I]);
+      Ops.push_back(this->Optims[I]);
 
     //output op
-    Ops.push_back((Operation)this->Out);
-    */
+    Ops.push_back(*this->Out);
 
     //run
     TF_CHECK_OK(
       Sess.Run(
         {{this->Inp,this->Inps},{this->Expected,this->Expecteds}}, 
-        {this->Optims[0],this->Optims[1],*this->Out}, 
+        Ops,
         nullptr
       )
     );    
