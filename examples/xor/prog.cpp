@@ -49,7 +49,9 @@ int main(int Argc,char* Args[]){
   type<ilong> Hidden_Units;
   type<long>  Num_Classes;
 
-  ilong Hidden_Units_Values = {4}; //1 layer of 4 neurons
+  //1 layer of 4 neurons, 2 classes make 2 output neurons
+  //minimum shape: [4,2], change to [40,2] for better results.
+  ilong Hidden_Units_Values = {40}; 
 
   dnn_classifier* Model = build_dnn_classifier(
     Num_Inputs   = 2,
