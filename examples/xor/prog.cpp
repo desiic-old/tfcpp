@@ -51,7 +51,7 @@ int main(int Argc,char* Args[]){
 
   //1 layer of 4 neurons, 2 classes make 2 output neurons
   //minimum hiddens: [4], change to [40] for better results.
-  ilong Hidden_Units_Values = {4,2}; 
+  ilong Hidden_Units_Values = {40,20}; 
 
   dnn_classifier* Model = build_dnn_classifier(
     Num_Inputs   = 2,

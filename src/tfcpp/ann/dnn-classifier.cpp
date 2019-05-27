@@ -123,7 +123,7 @@ namespace tfcpp {
         this->Hiddens.push_back(Layer);
       }
       else{
-        Relu Layer = Relu(R, Add(R, MatMul(R,this->Weights[I-1], this->Weights[I]), this->Biases[I]));
+        Relu Layer = Relu(R, Add(R, MatMul(R,this->Hiddens[I-1], this->Weights[I]), this->Biases[I]));
         this->Hiddens.push_back(Layer);
       }
     }//hidden layer loop
@@ -168,11 +168,15 @@ namespace tfcpp {
 
     Vars.push_back(*this->Out_Bias);
 
-    //add gradients
+    //add gradient properties to nodes
     TF_CHECK_OK(
-      AddSymbolicGradients(R, Losses, Vars, &Grad_Outputs)
+      //AddSymbolicGradients(R, Losses, Vars, &Grad_Outputs)
+      AddSymbolicGradients(R, {*this->Loss}, 
+      {this->Weights[0],this->Weights[1],*this->Out_Weight,
+        this->Biases[0],this->Biases[1],*this->Out_Bias}, &Grad_Outputs)
     );
 
+    //add gradient operations to optimisation list
     for (long I=0; I<Num_Hiddens; I++){
       applygd Optim = ApplyGradientDescent(R, this->Weights[I], Cast(R,0.01,DT_FLOAT), {Grad_Outputs[I]});
       this->Optims.push_back(Optim);
