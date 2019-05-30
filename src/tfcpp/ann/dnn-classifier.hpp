@@ -59,16 +59,17 @@ namespace tfcpp {
       Placeholder      Inp      = Placeholder(R, DT_FLOAT); //avoid conflict with tf::Input
       Placeholder      Expected = Placeholder(R, DT_FLOAT); //probs, not labels
 
-      vector<Variable> Weights; //hidden layers
-      vector<Variable> Biases;  //hidden layers
-      vector<Relu>     Hiddens;
+      vector<Variable> Weights;    //hidden layers
+      vector<Variable> Biases;     //hidden layers
+      vector<Relu>     Hiddens;    //outputs of hidden layers
 
-      Variable*        Out_Weight;
-      Variable*        Out_Bias;
-      Identity*        Out;
-      Softmax*         Probs; //probabilities
-      Sum*             Loss;
-      vector<applygd>  Optims;
+      Variable*        Out_Weight; //output layer weight
+      Variable*        Out_Bias;   //output layer bias
+      Identity*        Out;        //output layer's output (shape: [Num_Classes])
+
+      Softmax*         Probs;      //probabilities (shape: [Num_Classes])
+      Sum*             Loss;       //loss, scalar
+      vector<applygd>  Optims;     //optimisation operations
 
       //training data
       vector<vector<long>> All_Inps;

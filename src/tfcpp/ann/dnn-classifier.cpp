@@ -119,10 +119,12 @@ namespace tfcpp {
       long Num_Units = this->Hidden_Units[I];
 
       if (I==0){
+        //input * weight + bias
         Relu Layer = Relu(R, Add(R, MatMul(R,this->Inp, this->Weights[I]), this->Biases[I]));
         this->Hiddens.push_back(Layer);
       }
       else{
+        //previous layer output * weight + bias
         Relu Layer = Relu(R, Add(R, MatMul(R,this->Hiddens[I-1], this->Weights[I]), this->Biases[I]));
         this->Hiddens.push_back(Layer);
       }
@@ -170,10 +172,7 @@ namespace tfcpp {
 
     //add gradient properties to nodes
     TF_CHECK_OK(
-      //AddSymbolicGradients(R, Losses, Vars, &Grad_Outputs)
-      AddSymbolicGradients(R, {*this->Loss}, 
-      {this->Weights[0],this->Weights[1],*this->Out_Weight,
-        this->Biases[0],this->Biases[1],*this->Out_Bias}, &Grad_Outputs)
+      AddSymbolicGradients(R, Losses, Vars, &Grad_Outputs)
     );
 
     //add gradient operations to optimisation list

@@ -50,13 +50,13 @@ int main(int Argc,char* Args[]){
   type<long>  Num_Classes;
 
   //1 layer of 4 neurons, 2 classes make 2 output neurons
-  //minimum hiddens: [4], change to [40] for better results.
+  //minimum hiddens: [4], change to [40], or even [40,20] for better results.
   ilong Hidden_Units_Values = {40,20}; 
 
   dnn_classifier* Model = build_dnn_classifier(
     Num_Inputs   = 2,
     Hidden_Units = Hidden_Units_Values,
-    Num_Classes  = 2 //2 identity output neurons, not counted in shape.
+    Num_Classes  = 2 //2 identity output neurons, counted in shape??
   );
 
   //set training data (xor)
